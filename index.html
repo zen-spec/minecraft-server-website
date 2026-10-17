@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LunexSMP - Server Minecraft Economy PvP &amp; CPvP</title>
+  <meta name="description" content="LunexSMP adalah server Minecraft Economy PvP dan Crystal PvP (CPvP). Spawner grinding, shard upgrade, dan Auction House aktif. Hubungkan Java dan Bedrock.">
+  
+  <!-- Typography (Google Fonts: Chakra Petch, Plus Jakarta Sans, JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Aksesibilitas: Tautan lewati ke konten utama -->
+  <a href="#main-content" class="skip-link">Lewati ke konten utama</a>
+
+  <!-- Header & Navigasi -->
+  <header class="site-header" id="site-header">
+    <div class="container header-container">
+      <a href="#beranda" class="brand" aria-label="LunexSMP Beranda">
+        <img src="images/logo.webp" alt="Logo LunexSMP" class="brand-logo" width="32" height="32" onerror="this.style.display='none';">
+        <span class="brand-text">LUNEX<span class="brand-accent">SMP</span></span>
+      </a>
+
+      <!-- Tombol Menu Mobile -->
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Buka menu navigasi">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+
+      <!-- Navigasi Utama -->
+      <nav class="primary-nav" id="primary-nav" aria-label="Navigasi Utama">
+        <ul class="nav-list">
+          <li><a href="#beranda" class="nav-link">Beranda</a></li>
+          <li><a href="#fitur" class="nav-link">Fitur Server</a></li>
+          <li><a href="#store" class="nav-link">Store</a></li>
+          <li><a href="#aturan" class="nav-link">Aturan</a></li>
+          <li><a href="#cara-join" class="nav-link">Cara Join</a></li>
+        </ul>
+        <div class="nav-cta">
+          <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+            <svg class="icon" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6h0a14.5 14.5 0 0 0-4-1.5 9.8 9.8 0 0 0-.5 1.5 13.9 13.9 0 0 0-3 0 9.8 9.8 0 0 0-.5-1.5 14.5 14.5 0 0 0-4 1.5c-2.5 4-3 8-2.5 12a14.4 14.4 0 0 0 4.5 2.5c.5-.7 1-1.4 1.3-2.1-.5-.2-1-.4-1.5-.7.1-.1.2-.2.3-.3a11.2 11.2 0 0 1 8.4 0c.1.1.2.2.3.3-.5.3-1 .5-1.5.7.4.7.8 1.4 1.3 2.1a14.4 14.4 0 0 0 4.5-2.5c.5-4 0-8-2.4-12z"></path>
+              <circle cx="8.5" cy="12.5" r="1.5"></circle>
+              <circle cx="15.5" cy="12.5" r="1.5"></circle>
+            </svg>
+            <span>Discord</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Konten Utama -->
+  <main id="main-content">
+    
+    <!-- 1. Section Beranda (Hero & Status) -->
+    <section class="hero-section" id="beranda" aria-labelledby="hero-title">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <p class="hero-eyebrow">SERVER MINECRAFT INDONESIA</p>
+          <h1 id="hero-title" class="hero-title">
+            ECONOMY PVP DENGAN MEKANIK <span class="text-accent">CRYSTAL PVP</span>
+          </h1>
+          <p class="hero-desc">
+            Pertarungan tanpa jeda, sistem spawner intensif, pengumpulan shard langka, dan pasar terbuka Auction House. Dirancang untuk pertarungan kompetitif yang adil.
+          </p>
+
+          <!-- Status Server Live (Loading / Online / Offline) -->
+          <div class="server-status-card" id="server-status-card">
+            <div class="status-indicator-group">
+              <span class="status-dot status-loading" id="status-dot" aria-hidden="true"></span>
+              <span class="status-text" id="status-text">Memeriksa status server...</span>
+            </div>
+            <div class="status-meta" id="status-meta" aria-live="polite">
+              <span class="player-count" id="player-count">Memuat jumlah pemain...</span>
+              <span class="version-badge" id="server-version">Java 1.20+ / Bedrock</span>
+            </div>
+          </div>
+
+          <!-- Pilihan IP Server (Java & Bedrock) -->
+          <div class="ip-boxes-grid">
+            <!-- Box IP Java -->
+            <div class="ip-box">
+              <div class="ip-box-header">
+                <span class="ip-badge">JAVA EDITION</span>
+                <span class="ip-port-label">Port Default: 25070</span>
+              </div>
+              <div class="ip-address-row">
+                <code class="ip-code" id="java-ip-text">play.lunexsmp.my.id:25070</code>
+                <button type="button" class="btn btn-primary btn-copy" id="btn-copy-java" data-clipboard="play.lunexsmp.my.id:25070" aria-label="Salin IP Java LunexSMP">
+                  <svg class="icon icon-copy" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="btn-text">Salin IP</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Box IP Bedrock -->
+            <div class="ip-box">
+              <div class="ip-box-header">
+                <span class="ip-badge">BEDROCK EDITION</span>
+                <span class="ip-port-label">Port Khusus: 19200</span>
+              </div>
+              <div class="ip-address-row">
+                <code class="ip-code" id="bedrock-ip-text">play.lunexsmp.my.id:19200</code>
+                <button type="button" class="btn btn-outline btn-copy" id="btn-copy-bedrock" data-clipboard="play.lunexsmp.my.id:19200" aria-label="Salin IP Bedrock LunexSMP">
+                  <svg class="icon icon-copy" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="btn-text">Salin IP</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toast Feedback Salin -->
+          <div class="copy-feedback-toast" id="copy-toast" role="status" aria-live="polite" aria-atomic="true">
+            Alamat IP berhasil disalin ke clipboard.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Section Fitur Server (EconomySMP Core v2 All-in-One Engine) -->
+    <section class="features-section" id="fitur" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-kicker">MEKANIK SERVER ECONOMYSMP CORE V2</p>
+          <h2 id="features-title" class="section-title">SISTEM PERTARUNGAN &amp; EKONOMI</h2>
+          <p class="section-subtitle">
+            Ditenagai oleh core all-in-one berkinerja tinggi dengan sistem ekonomi terintegrasi, duel tanpa latensi artifisial, dan fitur survival kompetitif.
+          </p>
+        </div>
+
+        <div class="features-layout">
+          <!-- Flagship 1: CPvP & Duels Engine -->
+          <article class="feature-flagship">
+            <div class="flagship-content">
+              <span class="tag-accent">CORE PVP SYSTEM</span>
+              <h3 class="flagship-title">Crystal PvP (CPvP) &amp; Duels Arena</h3>
+              <p class="flagship-desc">
+                Mekanik pertarungan End Crystal dan Respawn Anchor tanpa jeda tick (no-delay). Sistem duel kompetitif lengkap dengan antrean matchmaking dan spectator mode.
+              </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Penempatan kristal dan obsidian instan tanpa delay artifisial.</span>
+                </li>
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Antrean duel 1v1 dengan kit kustom dan arena khusus (<code class="inline-code">/duels</code>).</span>
+                </li>
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Combat tagging otomatis untuk mencegah logout saat bertarung.</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="flagship-visual" aria-label="Visual arena CPvP LunexSMP">
+              <picture>
+                <source srcset="images/cpvp-arena.webp" type="image/webp">
+                <img src="images/cpvp-arena.webp" alt="Tangkapan layar arena pertarungan Crystal PvP LunexSMP" class="flagship-img" loading="lazy" width="600" height="340" onerror="this.style.display='none'; this.closest('.flagship-visual').querySelector('.screenshot-placeholder').style.display='flex';">
+              </picture>
+              <div class="screenshot-placeholder" style="display: none;">
+                <svg class="placeholder-icon" aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span class="placeholder-title">[SCREENSHOT ARENA CPVP]</span>
+                <span class="placeholder-note">Simpan foto sebagai images/cpvp-arena.webp</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Flagship 2: Economy & Market System -->
+          <article class="feature-flagship flagship-reverse">
+            <div class="flagship-content">
+              <span class="tag-accent">CORE MARKET SYSTEM</span>
+              <h3 class="flagship-title">Dual Currency, Auction House &amp; Orders</h3>
+              <p class="flagship-desc">
+                Sistem ekonomi dua mata uang (Uang Saldo &amp; Shard Kristal). Jual beli antar pemain tanpa perantara melalui sistem Auction House dan permintaan beli pesanan (Player Orders).
+              </p>
+              <ul class="feature-checklist">
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Pasar terbuka Auction House (<code class="inline-code">/ah</code>) dan Order Book pesanan (<code class="inline-code">/orders</code>).</span>
+                </li>
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Mata uang Shard khusus untuk membuka perlengkapan tingkat lanjut (<code class="inline-code">/shard</code>).</span>
+                </li>
+                <li>
+                  <svg class="icon-check" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Perintah jual cepat <code class="inline-code">/sell</code>, <code class="inline-code">/sellall</code>, dan <code class="inline-code">/sellhand</code> dengan bonus multiplier hingga 1.5x.</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="flagship-visual" aria-label="Visual pasar Auction House LunexSMP">
+              <picture>
+                <source srcset="images/auction-house.webp" type="image/webp">
+                <img src="images/auction-house.webp" alt="Tangkapan layar Auction House dan Order Pemain LunexSMP" class="flagship-img" loading="lazy" width="600" height="340" onerror="this.style.display='none'; this.closest('.flagship-visual').querySelector('.screenshot-placeholder').style.display='flex';">
+              </picture>
+              <div class="screenshot-placeholder" style="display: none;">
+                <svg class="placeholder-icon" aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span class="placeholder-title">[SCREENSHOT AUCTION HOUSE &amp; ORDERS]</span>
+                <span class="placeholder-note">Simpan foto sebagai images/auction-house.webp</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4 Modul Pendukung Survival Economy Core -->
+          <div class="modules-grid">
+            <article class="module-card">
+              <div class="card-icon-wrapper">
+                <svg class="card-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                  <polyline points="2 17 12 22 22 17"></polyline>
+                  <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+              </div>
+              <h3 class="card-title">Stacking Spawners</h3>
+              <p class="card-desc">
+                Tumpuk spawner di markas tim Anda tanpa menyebabkan beban entitas berlebih. Menghasilkan bahan mentah untuk digiling dan dijual.
+              </p>
+              <div class="card-command"><code>Perintah: /spawner</code></div>
+            </article>
+
+            <article class="module-card">
+              <div class="card-icon-wrapper">
+                <svg class="card-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <h3 class="card-title">Teams &amp; Clan System</h3>
+              <p class="card-desc">
+                Bentuk klan bersama rekan, undang anggota baru, gunakan obrolan khusus klan, dan atur base bersama dengan satu titik home klan.
+              </p>
+              <div class="card-command"><code>Perintah: /team</code></div>
+            </article>
+
+            <article class="module-card">
+              <div class="card-icon-wrapper">
+                <svg class="card-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+              </div>
+              <h3 class="card-title">RTP Queue &amp; Multi-Homes</h3>
+              <p class="card-desc">
+                Teleportasi acak ke dunia bebas melalui sistem antrean pintar. Simpan hingga puluhan koordinat rumah pribadi sesuai tingkatan rank Anda.
+              </p>
+              <div class="card-command"><code>Perintah: /rtp, /home, /tpa</code></div>
+            </article>
+
+            <article class="module-card">
+              <div class="card-icon-wrapper">
+                <svg class="card-icon" aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                </svg>
+              </div>
+              <h3 class="card-title">Utility &amp; Drill 3x3</h3>
+              <p class="card-desc">
+                Dukungan peralatan tambang Drill 3x3, Axe Sell untuk memotong kayu otomatis, serta utilitas lengkap perbaikan alat dan kerajinan instan.
+              </p>
+              <div class="card-command"><code>Perintah: /repair, /craft, /anvil</code></div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Section Store & Rank (Valnex Survival CPvP Official Ranks) -->
+    <section class="store-section" id="store" aria-labelledby="store-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-kicker">VALNEX SURVIVAL CPVP</p>
+          <h2 id="store-title" class="section-title">DAFTAR RANK &amp; HARGA IN-GAME</h2>
+          <p class="section-subtitle">
+            Tingkatkan kenyamanan bermain Anda dengan kapasitas home lebih besar, slot order tambahan, bonus shard, multiplier sell, dan peralatan eksklusif.
+          </p>
+        </div>
+
+        <!-- Tombol Pengubah Skema Harga: Permanen vs Bulanan -->
+        <div class="billing-switcher-container">
+          <div class="billing-switcher" role="tablist" aria-label="Pilih Periode Langganan Rank">
+            <button type="button" class="billing-btn active" id="billing-perm-btn" role="tab" aria-selected="true" data-period="permanent">
+              Rank Permanen (Selamanya)
+            </button>
+            <button type="button" class="billing-btn" id="billing-month-btn" role="tab" aria-selected="false" data-period="monthly">
+              Rank Bulanan (30 Hari)
+            </button>
+          </div>
+          <p class="billing-note" id="billing-period-caption">
+            Menampilkan harga <strong>Permanen</strong> (berlaku selamanya selama server beroperasi).
+          </p>
+        </div>
+
+        <!-- Grid 8 Tingkatan Rank -->
+        <div class="ranks-grid-v2" id="ranks-container">
+          
+          <!-- 1. Nova -->
+          <article class="rank-card-v2" data-rank="nova">
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">⚡</span>
+              <h3 class="rank-title">Nova</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 30.000" data-month="Rp 10.000">Rp 30.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 10 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 3 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +4 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 5M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.1x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Perlengkapan &amp; Perintah:</div>
+              <ul class="perks-list">
+                <li>Kit Nova</li>
+                <li>Ender Chest Virtual (<code class="inline-code">/ec</code>)</li>
+                <li>Topi Blok Kosmetik (<code class="inline-code">/hat</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 2. Nova+ -->
+          <article class="rank-card-v2" data-rank="nova-plus">
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">🌟</span>
+              <h3 class="rank-title">Nova+</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 70.000" data-month="Rp 20.000">Rp 70.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 20 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 5 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +8 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 12M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.15x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Nova, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Nova+</li>
+                <li>Ubah Nama Panggilan (<code class="inline-code">/nick</code>)</li>
+                <li>Meja Kerja Portabel (<code class="inline-code">/wb</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 3. Apex -->
+          <article class="rank-card-v2" data-rank="apex">
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">🔱</span>
+              <h3 class="rank-title">Apex</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 80.000" data-month="Rp 25.000">Rp 80.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 30 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 7 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +12 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 30M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.2x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Nova+, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Apex</li>
+                <li>Anvil Virtual (<code class="inline-code">/anvil</code>)</li>
+                <li>Mode Terbang Pribadi (<code class="inline-code">/fly</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 4. Custom (Your Name) -->
+          <article class="rank-card-v2 rank-special" data-rank="custom">
+            <div class="rank-badge-ribbon">KUSTOM NAMA</div>
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">🎨</span>
+              <h3 class="rank-title">Custom (Your Name)</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 90.000" data-month="Rp 30.000">Rp 90.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 30 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 7 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +12 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 30M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.2x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Fitur Setara Apex &amp; Hak Istimewa:</div>
+              <ul class="perks-list">
+                <li>Nama prefix bebas (maks 10 karakter)</li>
+                <li>Pilihan warna bebas (satu warna atau gradasi)</li>
+                <li>Kit Apex, <code class="inline-code">/anvil</code>, dan <code class="inline-code">/fly</code></li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 5. Vortex -->
+          <article class="rank-card-v2" data-rank="vortex">
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">🌀</span>
+              <h3 class="rank-title">Vortex</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 120.000" data-month="Rp 40.000">Rp 120.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 40 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 10 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +16 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 65M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.3x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Apex, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Vortex</li>
+                <li>Perbaikan Alat Instan (<code class="inline-code">/repair</code>)</li>
+                <li>Warna Nama Khusus (<code class="inline-code">/nickcolor</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 6. Zenith -->
+          <article class="rank-card-v2 rank-featured" data-rank="zenith">
+            <div class="rank-badge-ribbon">PILIHAN FAVORIT</div>
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">👑</span>
+              <h3 class="rank-title">Zenith</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 200.000" data-month="Rp 65.000">Rp 200.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 50 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 13 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +20 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 150M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.35x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Vortex, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Zenith &amp; Alat Drill 3x3</li>
+                <li>Perbaiki Semua Alat (<code class="inline-code">/repair all</code>)</li>
+                <li>Meja Kerajinan Virtual (<code class="inline-code">/craft</code>)</li>
+                <li>Ganti Nama Item (<code class="inline-code">/itemname</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 7. Eclipse -->
+          <article class="rank-card-v2" data-rank="eclipse">
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">🌑</span>
+              <h3 class="rank-title">Eclipse</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 350.000" data-month="Rp 115.000">Rp 350.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 60 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 16 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +24 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 400M</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.4x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Zenith, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Eclipse</li>
+                <li>Peralatan Axe Sell &amp; Drill 3x3</li>
+                <li>Pengatur Kecepatan Terbang (<code class="inline-code">/flyspeed</code>)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+          <!-- 8. Infinity -->
+          <article class="rank-card-v2 rank-ultimate" data-rank="infinity">
+            <div class="rank-badge-ribbon">TIER TERTINGGI</div>
+            <div class="rank-card-top">
+              <span class="rank-tier-icon">♾️</span>
+              <h3 class="rank-title">Infinity</h3>
+              <div class="rank-price-box">
+                <span class="price-amount" data-perm="Rp 500.000" data-month="Rp 165.000">Rp 500.000</span>
+                <span class="price-period" data-perm="" data-month="/bulan"></span>
+              </div>
+            </div>
+            <div class="rank-stats-grid">
+              <div class="stat-pill"><span class="stat-icon">🏠</span> 70 Homes</div>
+              <div class="stat-pill"><span class="stat-icon">📦</span> 20 Order</div>
+              <div class="stat-pill"><span class="stat-icon">🔮</span> +28 Shard</div>
+              <div class="stat-pill"><span class="stat-icon">💰</span> Saldo 1B</div>
+              <div class="stat-pill highlight-pill"><span class="stat-icon">📈</span> Sell 1.5x</div>
+            </div>
+            <div class="rank-details">
+              <div class="details-heading">Semua Fitur Eclipse, Ditambah:</div>
+              <ul class="perks-list">
+                <li>Kit Infinity &amp; Alat Drill 3x3</li>
+                <li>Prioritas Layanan Dukungan Tiket Staf</li>
+                <li>Multiplier Jual Tertinggi (1.5x)</li>
+              </ul>
+            </div>
+            <div class="rank-cta-wrap">
+              <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">
+                Beli via Ticket
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Section Aturan (Interactive Accessible Accordion) -->
+    <section class="rules-section" id="aturan" aria-labelledby="rules-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-kicker">KEBIJAKAN KOMUNITAS</p>
+          <h2 id="rules-title" class="section-title">ATURAN SERVER LUNEXSMP</h2>
+          <p class="section-subtitle">Pelanggaran aturan akan langsung ditindak tanpa dispensasi demi menjaga keadilan kompetisi.</p>
+        </div>
+
+        <div class="accordion" id="rules-accordion">
+          <!-- Rule 1 -->
+          <div class="accordion-item">
+            <button type="button" class="accordion-trigger" id="rule-btn-1" aria-expanded="false" aria-controls="rule-panel-1">
+              <span class="rule-num">01</span>
+              <span class="rule-title">Dilarang Menggunakan Cheat dan Hacked Client</span>
+              <svg class="accordion-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-panel" id="rule-panel-1" role="region" aria-labelledby="rule-btn-1" hidden>
+              <div class="panel-inner">
+                <p>
+                  Penggunaan software pihak ketiga seperti Killaura, Auto-Totem, Auto-Crystal, Flight, Speed, X-Ray, atau baritone dilarang keras. Sistem pendeteksi otomatis dan staf akan langsung memberikan sanksi ban permanen pada akun terkait.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 2 -->
+          <div class="accordion-item">
+            <button type="button" class="accordion-trigger" id="rule-btn-2" aria-expanded="false" aria-controls="rule-panel-2">
+              <span class="rule-num">02</span>
+              <span class="rule-title">Dilarang Duplikasi Item dan Exploit Bug</span>
+              <svg class="accordion-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-panel" id="rule-panel-2" role="region" aria-labelledby="rule-btn-2" hidden>
+              <div class="panel-inner">
+                <p>
+                  Memanfaatkan celah keamanan, bug dupe chunk, atau bug sistem ekonomi untuk memperbanyak item secara ilegal berakibat wipe inventaris total dan ban perangkat. Laporkan temuan bug kepada staf di Discord untuk memperoleh hadiah reward.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 3 -->
+          <div class="accordion-item">
+            <button type="button" class="accordion-trigger" id="rule-btn-3" aria-expanded="false" aria-controls="rule-panel-3">
+              <span class="rule-num">03</span>
+              <span class="rule-title">Etika Komunikasi dan Larangan Doxxing</span>
+              <svg class="accordion-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-panel" id="rule-panel-3" role="region" aria-labelledby="rule-btn-3" hidden>
+              <div class="panel-inner">
+                <p>
+                  Trash-talk ringan dalam konteks pertempuran diperbolehkan. Namun, menyebarkan data pribadi pemain lain (doxxing), ancaman fisik dunia nyata, rasisme, atau pelecehan seksual akan langsung dilaporkan dan diproses ke pemblokiran permanen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 4 -->
+          <div class="accordion-item">
+            <button type="button" class="accordion-trigger" id="rule-btn-4" aria-expanded="false" aria-controls="rule-panel-4">
+              <span class="rule-num">04</span>
+              <span class="rule-title">Batas Akun Alternatif (Alt Account)</span>
+              <svg class="accordion-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-panel" id="rule-panel-4" role="region" aria-labelledby="rule-btn-4" hidden>
+              <div class="panel-inner">
+                <p>
+                  Setiap pemain diizinkan memiliki maksimal 1 akun alt semata-mata untuk keperluan AFK spawner di base. Dilarang menggunakan akun alternatif untuk menghindar dari sanksi ban (ban evasion) atau mengeksploitasi sistem kuota hadiah.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rule 5 -->
+          <div class="accordion-item">
+            <button type="button" class="accordion-trigger" id="rule-btn-5" aria-expanded="false" aria-controls="rule-panel-5">
+              <span class="rule-num">05</span>
+              <span class="rule-title">Combat Logging dan Disconnect Saat Bertarung</span>
+              <svg class="accordion-chevron" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="accordion-panel" id="rule-panel-5" role="region" aria-labelledby="rule-btn-5" hidden>
+              <div class="panel-inner">
+                <p>
+                  Keluar dari server (disconnect / close game) saat status pertempuran (Combat Tag) masih aktif akan memicu eliminasi instan oleh sistem. Seluruh item di inventaris pemain akan jatuh di tempat kejadian.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Section Cara Join (Accessible Tabs: Java vs Bedrock) -->
+    <section class="join-section" id="cara-join" aria-labelledby="join-title">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-kicker">PANDUAN KONEKSI</p>
+          <h2 id="join-title" class="section-title">CARA BERGABUNG KE SERVER</h2>
+          <p class="section-subtitle">Mendukung koneksi langsung dari Minecraft Java Edition (PC) dan Bedrock Edition (Android, iOS, Windows 10/11, Konsol).</p>
+        </div>
+
+        <div class="join-card">
+          <!-- Tab Controller -->
+          <div class="tab-list" role="tablist" aria-label="Pilih Edisi Minecraft">
+            <button type="button" class="tab-btn active" id="tab-btn-java" role="tab" aria-selected="true" aria-controls="tab-panel-java">
+              Minecraft Java Edition
+            </button>
+            <button type="button" class="tab-btn" id="tab-btn-bedrock" role="tab" aria-selected="false" aria-controls="tab-panel-bedrock">
+              Minecraft Bedrock Edition
+            </button>
+          </div>
+
+          <!-- Panel Java -->
+          <div class="tab-panel active" id="tab-panel-java" role="tabpanel" aria-labelledby="tab-btn-java">
+            <div class="steps-list">
+              <div class="step-item">
+                <span class="step-index">1</span>
+                <div class="step-desc">
+                  <strong>Buka Game</strong>: Jalankan Minecraft Java Edition pada komputer Anda. Versi yang disarankan adalah 1.20 hingga versi terbaru.
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">2</span>
+                <div class="step-desc">
+                  <strong>Masuk ke Menu</strong>: Klik tombol <strong>Multiplayer</strong> pada layar utama, kemudian klik <strong>Add Server</strong> di bagian bawah.
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">3</span>
+                <div class="step-desc">
+                  <strong>Konfigurasi Alamat</strong>: Masukkan nama server <code>LunexSMP</code> dan isi Server Address dengan alamat berikut:
+                  <div class="step-code-row">
+                    <code class="step-code">play.lunexsmp.my.id:25070</code>
+                    <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="play.lunexsmp.my.id:25070" aria-label="Salin IP Java LunexSMP">
+                      Salin
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">4</span>
+                <div class="step-desc">
+                  <strong>Mulai Bermain</strong>: Klik tombol <strong>Done</strong>, pilih server LunexSMP dari daftar, lalu klik <strong>Join Server</strong>.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel Bedrock -->
+          <div class="tab-panel" id="tab-panel-bedrock" role="tabpanel" aria-labelledby="tab-btn-bedrock" hidden>
+            <div class="steps-list">
+              <div class="step-item">
+                <span class="step-index">1</span>
+                <div class="step-desc">
+                  <strong>Buka Game</strong>: Jalankan Minecraft Bedrock Edition pada HP (Android/iOS) atau PC Windows Anda.
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">2</span>
+                <div class="step-desc">
+                  <strong>Buka Tab Server</strong>: Klik tombol <strong>Play</strong>, pilih tab <strong>Servers</strong>, lalu gulir ke bawah dan klik tombol <strong>Add Server</strong>.
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">3</span>
+                <div class="step-desc">
+                  <strong>Isi Detail Server &amp; Port</strong>:
+                  <div class="detail-box">
+                    <div class="detail-row">
+                      <span class="detail-label">Server Name:</span>
+                      <span class="detail-val">LunexSMP</span>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">Server Address:</span>
+                      <code class="detail-val">play.lunexsmp.my.id</code>
+                      <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="play.lunexsmp.my.id" aria-label="Salin Alamat Host Bedrock">Salin Host</button>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">Port Khusus:</span>
+                      <code class="detail-val highlight-val">19200</code>
+                      <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="19200" aria-label="Salin Port Bedrock">Salin Port</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="step-item">
+                <span class="step-index">4</span>
+                <div class="step-desc">
+                  <strong>Masuk ke Arena</strong>: Klik tombol <strong>Play</strong> untuk langsung terhubung, atau <strong>Save</strong> agar server tersimpan di daftar Anda.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 6. Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <span class="brand-text">LUNEX<span class="brand-accent">SMP</span></span>
+          <p class="footer-tagline">
+            Server Minecraft Economy PvP dan Crystal PvP Indonesia. Pengalaman bertarung seimbang, kompetitif, dan intensif.
+          </p>
+        </div>
+
+        <div class="footer-links-group">
+          <h4 class="footer-title">Navigasi</h4>
+          <ul class="footer-list">
+            <li><a href="#beranda">Beranda</a></li>
+            <li><a href="#fitur">Fitur Server</a></li>
+            <li><a href="#store">Store &amp; Rank</a></li>
+            <li><a href="#aturan">Aturan Server</a></li>
+            <li><a href="#cara-join">Cara Masuk</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-community">
+          <h4 class="footer-title">Komunitas &amp; Media Sosial</h4>
+          <p class="footer-text">
+            Bergabunglah dengan komunitas resmi LunexSMP untuk mendapatkan pengumuman event, update server, video gameplay, dan layanan tiket bantuan.
+          </p>
+          <div class="footer-cta-row">
+            <a href="https://discord.gg/UdwdfAXuDp" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" aria-label="Gabung Discord Server LunexSMP">
+              <svg class="icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6h0a14.5 14.5 0 0 0-4-1.5 9.8 9.8 0 0 0-.5 1.5 13.9 13.9 0 0 0-3 0 9.8 9.8 0 0 0-.5-1.5 14.5 14.5 0 0 0-4 1.5c-2.5 4-3 8-2.5 12a14.4 14.4 0 0 0 4.5 2.5c.5-.7 1-1.4 1.3-2.1-.5-.2-1-.4-1.5-.7.1-.1.2-.2.3-.3a11.2 11.2 0 0 1 8.4 0c.1.1.2.2.3.3-.5.3-1 .5-1.5.7.4.7.8 1.4 1.3 2.1a14.4 14.4 0 0 0 4.5-2.5c.5-4 0-8-2.4-12z"></path>
+                <circle cx="8.5" cy="12.5" r="1.5"></circle>
+                <circle cx="15.5" cy="12.5" r="1.5"></circle>
+              </svg>
+              <span>Discord</span>
+            </a>
+            <a href="https://chat.whatsapp.com/BetVhwiavasEQKUqWTLn5H" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" aria-label="Gabung WhatsApp Group LunexSMP">
+              <svg class="icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>WhatsApp Group</span>
+            </a>
+            <a href="https://www.tiktok.com/@lunexsmp2k26" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" aria-label="Kunjungi Akun TikTok LunexSMP">
+              <svg class="icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+              </svg>
+              <span>TikTok</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="copyright-text">
+          &copy; 2026 LunexSMP. Seluruh hak cipta dilindungi.
+        </p>
+        <p class="disclaimer-text">
+          LunexSMP adalah server independen buatan komunitas dan tidak terafiliasi dengan Mojang Studios atau Microsoft Corporation.
+        </p>
+        <div class="back-to-top">
+          <a href="#beranda" class="btn-top" aria-label="Kembali ke atas">
+            <svg class="icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            <span>Kembali ke atas</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
