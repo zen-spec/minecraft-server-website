@@ -1,0 +1,7 @@
+# Jangan upload script yang mengandung token
+sync-github.ps1
+
+# File sistem
+.git/
+Thumbs.db
+.DS_Store
