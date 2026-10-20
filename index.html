@@ -70,15 +70,23 @@
             Pertarungan tanpa jeda, sistem spawner intensif, pengumpulan shard langka, dan pasar terbuka Auction House. Dirancang untuk pertarungan kompetitif yang adil.
           </p>
 
-          <!-- Status Server Live (Loading / Online / Offline) -->
+          <!-- Status Server Live (Loading / Online / Offline & Live Auto-Update) -->
           <div class="server-status-card" id="server-status-card">
             <div class="status-indicator-group">
               <span class="status-dot status-loading" id="status-dot" aria-hidden="true"></span>
-              <span class="status-text" id="status-text">Memeriksa status server...</span>
+              <div class="status-text-col">
+                <span class="status-text" id="status-text">Memeriksa status server...</span>
+                <span class="status-refresh-note" id="status-refresh-note">Auto-refresh aktif</span>
+              </div>
             </div>
             <div class="status-meta" id="status-meta" aria-live="polite">
               <span class="player-count" id="player-count">Memuat jumlah pemain...</span>
               <span class="version-badge" id="server-version">Java 1.20+ / Bedrock</span>
+              <button type="button" class="btn-refresh-status" id="btn-refresh-status" aria-label="Segarkan status server secara langsung" title="Segarkan status server">
+                <svg class="icon-refresh" id="icon-refresh-svg" aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -87,12 +95,12 @@
             <!-- Box IP Java -->
             <div class="ip-box">
               <div class="ip-box-header">
-                <span class="ip-badge">JAVA EDITION</span>
-                <span class="ip-port-label">Port Default: 25070</span>
+                <span class="ip-badge">JAVA &amp; POJAV</span>
+                <span class="ip-port-label">Port: 26040</span>
               </div>
               <div class="ip-address-row">
-                <code class="ip-code" id="java-ip-text">play.lunexsmp.my.id:25070</code>
-                <button type="button" class="btn btn-primary btn-copy" id="btn-copy-java" data-clipboard="play.lunexsmp.my.id:25070" aria-label="Salin IP Java LunexSMP">
+                <code class="ip-code" id="java-ip-text">play.lunexsmp.my.id:26040</code>
+                <button type="button" class="btn btn-primary btn-copy" id="btn-copy-java" data-clipboard="play.lunexsmp.my.id:26040" aria-label="Salin IP Java LunexSMP">
                   <svg class="icon icon-copy" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -106,11 +114,11 @@
             <div class="ip-box">
               <div class="ip-box-header">
                 <span class="ip-badge">BEDROCK EDITION</span>
-                <span class="ip-port-label">Port Khusus: 19200</span>
+                <span class="ip-port-label">Port Khusus: 19920</span>
               </div>
               <div class="ip-address-row">
-                <code class="ip-code" id="bedrock-ip-text">play.lunexsmp.my.id:19200</code>
-                <button type="button" class="btn btn-outline btn-copy" id="btn-copy-bedrock" data-clipboard="play.lunexsmp.my.id:19200" aria-label="Salin IP Bedrock LunexSMP">
+                <code class="ip-code" id="bedrock-ip-text">play.lunexsmp.my.id:19920</code>
+                <button type="button" class="btn btn-outline btn-copy" id="btn-copy-bedrock" data-clipboard="play.lunexsmp.my.id:19920" aria-label="Salin IP Bedrock LunexSMP">
                   <svg class="icon icon-copy" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -129,14 +137,14 @@
       </div>
     </section>
 
-    <!-- 2. Section Fitur Server (EconomySMP Core v2 All-in-One Engine) -->
+    <!-- 2. Section Fitur Server LunexSMP (Sistem Kompetitif & Ekonomi) -->
     <section class="features-section" id="fitur" aria-labelledby="features-title">
       <div class="container">
         <div class="section-header">
-          <p class="section-kicker">MEKANIK SERVER ECONOMYSMP CORE V2</p>
+          <p class="section-kicker">MEKANIK SERVER LUNEXSMP</p>
           <h2 id="features-title" class="section-title">SISTEM PERTARUNGAN &amp; EKONOMI</h2>
           <p class="section-subtitle">
-            Ditenagai oleh core all-in-one berkinerja tinggi dengan sistem ekonomi terintegrasi, duel tanpa latensi artifisial, dan fitur survival kompetitif.
+            Arsitektur gameplay survival kompetitif dengan ekonomi terintegrasi, pertarungan bebas latensi artifisial, dan fitur kustom LunexSMP.
           </p>
         </div>
 
@@ -144,7 +152,7 @@
           <!-- Flagship 1: CPvP & Duels Engine -->
           <article class="feature-flagship">
             <div class="flagship-content">
-              <span class="tag-accent">CORE PVP SYSTEM</span>
+              <span class="tag-accent">SISTEM COMBAT LUNEX</span>
               <h3 class="flagship-title">Crystal PvP (CPvP) &amp; Duels Arena</h3>
               <p class="flagship-desc">
                 Mekanik pertarungan End Crystal dan Respawn Anchor tanpa jeda tick (no-delay). Sistem duel kompetitif lengkap dengan antrean matchmaking dan spectator mode.
@@ -185,7 +193,7 @@
           <!-- Flagship 2: Economy & Market System -->
           <article class="feature-flagship flagship-reverse">
             <div class="flagship-content">
-              <span class="tag-accent">CORE MARKET SYSTEM</span>
+              <span class="tag-accent">SISTEM PASAR &amp; EKONOMI</span>
               <h3 class="flagship-title">Dual Currency, Auction House &amp; Orders</h3>
               <p class="flagship-desc">
                 Sistem ekonomi dua mata uang (Uang Saldo &amp; Shard Kristal). Jual beli antar pemain tanpa perantara melalui sistem Auction House dan permintaan beli pesanan (Player Orders).
@@ -222,7 +230,7 @@
             </div>
           </article>
 
-          <!-- 4 Modul Pendukung Survival Economy Core -->
+          <!-- 4 Modul Pendukung Survival LunexSMP -->
           <div class="modules-grid">
             <article class="module-card">
               <div class="card-icon-wrapper">
@@ -712,8 +720,8 @@
                 <div class="step-desc">
                   <strong>Konfigurasi Alamat</strong>: Masukkan nama server <code>LunexSMP</code> dan isi Server Address dengan alamat berikut:
                   <div class="step-code-row">
-                    <code class="step-code">play.lunexsmp.my.id:25070</code>
-                    <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="play.lunexsmp.my.id:25070" aria-label="Salin IP Java LunexSMP">
+                    <code class="step-code">play.lunexsmp.my.id:26040</code>
+                    <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="play.lunexsmp.my.id:26040" aria-label="Salin IP Java LunexSMP">
                       Salin
                     </button>
                   </div>
@@ -759,8 +767,8 @@
                     </div>
                     <div class="detail-row">
                       <span class="detail-label">Port Khusus:</span>
-                      <code class="detail-val highlight-val">19200</code>
-                      <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="19200" aria-label="Salin Port Bedrock">Salin Port</button>
+                      <code class="detail-val highlight-val">19920</code>
+                      <button type="button" class="btn btn-secondary btn-sm btn-copy" data-clipboard="19920" aria-label="Salin Port Bedrock">Salin Port</button>
                     </div>
                   </div>
                 </div>

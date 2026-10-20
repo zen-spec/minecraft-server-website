@@ -13,55 +13,115 @@ document.addEventListener('DOMContentLoaded', () => {
   initBillingSwitcher();
 });
 
-/* ==========================================================================
-   1. Status Server Live via Public API (R-17 & R-27)
-   Mendukung 3 State Nyata: Loading -> Online / Offline
-   ========================================================================== */
+/* 1. Status Server Live via Public API dengan Auto-Refresh Periodik */
 function initServerStatus() {
   const statusDot = document.getElementById('status-dot');
   const statusText = document.getElementById('status-text');
   const playerCount = document.getElementById('player-count');
   const serverVersion = document.getElementById('server-version');
+  const statusRefreshNote = document.getElementById('status-refresh-note');
+  const btnRefresh = document.getElementById('btn-refresh-status');
+  const iconRefreshSvg = document.getElementById('icon-refresh-svg');
 
   const serverHost = 'play.lunexsmp.my.id';
-  const serverPort = '25070';
-  const apiUrl = `https://api.mcstatus.io/v2/status/java/${serverHost}:${serverPort}`;
+  const serverPort = '26040';
+  const REFRESH_INTERVAL_MS = 30000;
+  let refreshTimer = null;
+  let hasLoadedOnce = false;
 
-  // Mengatur status loading awal
-  setLoadingState();
+  fetchServerStatus(false);
 
-  fetch(apiUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
+  refreshTimer = setInterval(() => {
+    fetchServerStatus(false);
+  }, REFRESH_INTERVAL_MS);
+
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      if (refreshTimer) clearInterval(refreshTimer);
+      fetchServerStatus(true);
+      refreshTimer = setInterval(() => {
+        fetchServerStatus(false);
+      }, REFRESH_INTERVAL_MS);
+    });
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      fetchServerStatus(false);
+    }
+  });
+
+  async function fetchServerStatus(isManual) {
+    if (!hasLoadedOnce) {
+      setLoadingState();
+    }
+    setSpinning(true);
+    if (statusRefreshNote) {
+      statusRefreshNote.textContent = isManual ? 'Menyegarkan status...' : 'Memeriksa live status...';
+    }
+
+    try {
+      const data = await fetchWithTimeout(`https://api.mcstatus.io/v2/status/java/${serverHost}:${serverPort}`, 5000);
       if (data && data.online) {
         setOnlineState(data);
       } else {
+        await tryFallback();
+      }
+    } catch {
+      await tryFallback();
+    } finally {
+      setSpinning(false);
+      hasLoadedOnce = true;
+    }
+  }
+
+  async function tryFallback() {
+    try {
+      const fallbackData = await fetchWithTimeout(`https://api.mcsrvstat.us/3/${serverHost}:${serverPort}`, 5000);
+      if (fallbackData && fallbackData.online) {
+        const onlineCount = fallbackData.players ? fallbackData.players.online : 0;
+        const maxCount = fallbackData.players ? fallbackData.players.max : 100;
+        const verStr = fallbackData.version || '1.20 - 1.21+';
+        setOnlineStateDirect(onlineCount, maxCount, verStr);
+      } else {
         setOfflineState();
       }
-    })
-    .catch(() => {
-      // Coba fallback ke mcsrvstat jika mcstatus gagal
-      fetch(`https://api.mcsrvstat.us/3/${serverHost}:${serverPort}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data && data.online) {
-            const onlineCount = data.players ? data.players.online : 0;
-            const maxCount = data.players ? data.players.max : 100;
-            const versionStr = data.version || '1.20+';
-            setOnlineStateDirect(onlineCount, maxCount, versionStr);
-          } else {
-            setOfflineState();
-          }
-        })
-        .catch(() => {
-          setOfflineState();
-        });
-    });
+    } catch {
+      setOfflineState();
+    }
+  }
+
+  async function fetchWithTimeout(url, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function setSpinning(spinning) {
+    if (iconRefreshSvg) {
+      if (spinning) {
+        iconRefreshSvg.classList.add('is-spinning');
+      } else {
+        iconRefreshSvg.classList.remove('is-spinning');
+      }
+    }
+    if (btnRefresh) {
+      btnRefresh.disabled = spinning;
+    }
+  }
+
+  function updateTimestampNote() {
+    if (!statusRefreshNote) return;
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    statusRefreshNote.textContent = `Auto-refresh aktif (${timeStr})`;
+  }
 
   function setLoadingState() {
     if (statusDot) {
@@ -76,18 +136,19 @@ function initServerStatus() {
       statusDot.className = 'status-dot status-online';
     }
     if (statusText) statusText.textContent = 'Server Online';
-    
+
     const online = (data.players && typeof data.players.online === 'number') ? data.players.online : 0;
     const max = (data.players && typeof data.players.max === 'number') ? data.players.max : 100;
-    
+
     if (playerCount) {
       playerCount.textContent = `${online} / ${max} Pemain Online`;
     }
 
-    if (serverVersion && data.version) {
-      const ver = data.version.name_clean || data.version.name || '1.20+';
+    if (serverVersion) {
+      const ver = (data.version && (data.version.name_clean || data.version.name)) ? (data.version.name_clean || data.version.name) : '1.20 - 1.21+';
       serverVersion.textContent = `Java ${ver} / Bedrock`;
     }
+    updateTimestampNote();
   }
 
   function setOnlineStateDirect(online, max, ver) {
@@ -97,15 +158,21 @@ function initServerStatus() {
     if (statusText) statusText.textContent = 'Server Online';
     if (playerCount) playerCount.textContent = `${online} / ${max} Pemain Online`;
     if (serverVersion) serverVersion.textContent = `Versi ${ver}`;
+    updateTimestampNote();
   }
 
   function setOfflineState() {
     if (statusDot) {
       statusDot.className = 'status-dot status-offline';
     }
-    if (statusText) statusText.textContent = 'Server Sedang Offline / Maintenance';
+    if (statusText) statusText.textContent = 'Server Sedang Pemeliharaan / Offline';
     if (playerCount) playerCount.textContent = '0 Pemain';
     if (serverVersion) serverVersion.textContent = 'Dalam Pemeliharaan';
+    if (statusRefreshNote) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      statusRefreshNote.textContent = `Dicek ${timeStr} (akan mencoba lagi)`;
+    }
   }
 }
 
