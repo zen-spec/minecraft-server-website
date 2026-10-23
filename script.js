@@ -24,7 +24,7 @@ function initServerStatus() {
   const iconRefreshSvg = document.getElementById('icon-refresh-svg');
 
   const serverHost = 'play.lunexsmp.my.id';
-  const serverPort = '26040';
+  const serverPort = '25860';
   const REFRESH_INTERVAL_MS = 30000;
   let refreshTimer = null;
   let hasLoadedOnce = false;
