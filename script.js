@@ -22,7 +22,6 @@ function initServerStatus() {
   const iconRefreshSvg = document.getElementById('icon-refresh-svg');
 
   const serverHost = 'play.lunexsmp.my.id';
-  const serverPort = '25565';
   const REFRESH_INTERVAL_MS = 30000;
   let refreshTimer = null;
   let hasLoadedOnce = false;
@@ -54,39 +53,49 @@ function initServerStatus() {
       setLoadingState();
     }
     setSpinning(true);
-    if (statusRefreshNote) {
-      statusRefreshNote.textContent = isManual ? 'Menyegarkan status...' : 'Memeriksa live status...';
-    }
 
     try {
-      const data = await fetchWithTimeout(`https://api.mcstatus.io/v2/status/java/${serverHost}:${serverPort}`, 5000);
+      const data = await fetchBestResult();
       if (data && data.online) {
         setOnlineState(data);
       } else {
-        await tryFallback();
+        setOfflineState();
       }
     } catch {
-      await tryFallback();
+      setOfflineState();
     } finally {
       setSpinning(false);
       hasLoadedOnce = true;
     }
   }
 
-  async function tryFallback() {
-    try {
-      const fallbackData = await fetchWithTimeout(`https://api.mcsrvstat.us/3/${serverHost}:${serverPort}`, 5000);
-      if (fallbackData && fallbackData.online) {
-        const onlineCount = fallbackData.players ? fallbackData.players.online : 0;
-        const maxCount = fallbackData.players ? fallbackData.players.max : 100;
-        const verStr = fallbackData.version || '1.20 - 1.21+';
-        setOnlineStateDirect(onlineCount, maxCount, verStr);
-      } else {
-        setOfflineState();
+  async function fetchBestResult() {
+    const primaryUrl = `https://api.mcstatus.io/v2/status/java/${serverHost}`;
+    const fallbackUrl = `https://api.mcsrvstat.us/3/${serverHost}`;
+
+    const normalize = (data, isFallback) => {
+      if (!data) return null;
+      if (isFallback) {
+        return {
+          online: data.online,
+          players: data.players,
+          version: { name_clean: data.version }
+        };
       }
-    } catch {
-      setOfflineState();
-    }
+      return data;
+    };
+
+    const tryFetch = async (url, isFallback) => {
+      const data = await fetchWithTimeout(url, 4000);
+      const norm = normalize(data, isFallback);
+      if (norm && norm.online) return norm;
+      throw new Error('offline');
+    };
+
+    return Promise.any([
+      tryFetch(primaryUrl, false),
+      tryFetch(fallbackUrl, true)
+    ]).catch(() => ({ online: false }));
   }
 
   async function fetchWithTimeout(url, timeoutMs) {
@@ -138,13 +147,6 @@ function initServerStatus() {
 
   }
 
-  function setOnlineStateDirect(online, max, ver) {
-    if (statusDot) {
-      statusDot.className = 'status-dot status-online';
-    }
-    if (statusText) statusText.textContent = 'Server Online';
-    if (playerCount) playerCount.textContent = `${online} / ${max} Pemain Online`;
-  }
 
   function setOfflineState() {
     if (statusDot) {
