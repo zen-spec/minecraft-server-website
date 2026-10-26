@@ -24,6 +24,7 @@ function initServerStatus() {
   const iconRefreshSvg = document.getElementById('icon-refresh-svg');
 
   const serverHost = 'play.lunexsmp.my.id';
+  const serverPort = '25565';
   const REFRESH_INTERVAL_MS = 30000;
   let refreshTimer = null;
   let hasLoadedOnce = false;
@@ -60,7 +61,7 @@ function initServerStatus() {
     }
 
     try {
-      const data = await fetchWithTimeout(`https://api.mcstatus.io/v2/status/java/${serverHost}`, 5000);
+      const data = await fetchWithTimeout(`https://api.mcstatus.io/v2/status/java/${serverHost}:${serverPort}`, 5000);
       if (data && data.online) {
         setOnlineState(data);
       } else {
@@ -76,7 +77,7 @@ function initServerStatus() {
 
   async function tryFallback() {
     try {
-      const fallbackData = await fetchWithTimeout(`https://api.mcsrvstat.us/3/${serverHost}`, 5000);
+      const fallbackData = await fetchWithTimeout(`https://api.mcsrvstat.us/3/${serverHost}:${serverPort}`, 5000);
       if (fallbackData && fallbackData.online) {
         const onlineCount = fallbackData.players ? fallbackData.players.online : 0;
         const maxCount = fallbackData.players ? fallbackData.players.max : 100;
