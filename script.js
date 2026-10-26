@@ -18,8 +18,6 @@ function initServerStatus() {
   const statusDot = document.getElementById('status-dot');
   const statusText = document.getElementById('status-text');
   const playerCount = document.getElementById('player-count');
-  const serverVersion = document.getElementById('server-version');
-  const statusRefreshNote = document.getElementById('status-refresh-note');
   const btnRefresh = document.getElementById('btn-refresh-status');
   const iconRefreshSvg = document.getElementById('icon-refresh-svg');
 
@@ -116,12 +114,6 @@ function initServerStatus() {
     }
   }
 
-  function updateTimestampNote() {
-    if (!statusRefreshNote) return;
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    statusRefreshNote.textContent = `Auto-refresh aktif (${timeStr})`;
-  }
 
   function setLoadingState() {
     if (statusDot) {
@@ -144,11 +136,6 @@ function initServerStatus() {
       playerCount.textContent = `${online} / ${max} Pemain Online`;
     }
 
-    if (serverVersion) {
-      const ver = (data.version && (data.version.name_clean || data.version.name)) ? (data.version.name_clean || data.version.name) : '1.20 - 1.21+';
-      serverVersion.textContent = `Java ${ver} / Bedrock`;
-    }
-    updateTimestampNote();
   }
 
   function setOnlineStateDirect(online, max, ver) {
@@ -157,8 +144,6 @@ function initServerStatus() {
     }
     if (statusText) statusText.textContent = 'Server Online';
     if (playerCount) playerCount.textContent = `${online} / ${max} Pemain Online`;
-    if (serverVersion) serverVersion.textContent = `Versi ${ver}`;
-    updateTimestampNote();
   }
 
   function setOfflineState() {
@@ -167,12 +152,6 @@ function initServerStatus() {
     }
     if (statusText) statusText.textContent = 'Server Sedang Pemeliharaan / Offline';
     if (playerCount) playerCount.textContent = '0 Pemain';
-    if (serverVersion) serverVersion.textContent = 'Dalam Pemeliharaan';
-    if (statusRefreshNote) {
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      statusRefreshNote.textContent = `Dicek ${timeStr} (akan mencoba lagi)`;
-    }
   }
 }
 
